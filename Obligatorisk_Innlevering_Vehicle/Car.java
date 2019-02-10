@@ -1,7 +1,7 @@
 import java.util.Calendar;
 import java.util.*;
 
-public class Car extends Vehicle implements Driveable, Fileable{
+public class Car extends Vehicle implements Driveable{
 	
 	private int power;
 	private java.util.Calendar productionDate;
@@ -12,6 +12,7 @@ public class Car extends Vehicle implements Driveable, Fileable{
 	public Car(String colour, String name, String serialNr, int model, int price,int power, int direction){
 		super(colour, name, serialNr, model, price, direction);
 
+		productionDate = new GregorianCalendar();
 		java.util.Calendar cal = new GregorianCalendar(2018,10,10);
 		setBuyingDate(cal);
 		this.power = power;
@@ -74,7 +75,7 @@ public class Car extends Vehicle implements Driveable, Fileable{
 
 	@Override 
 	public String toString(){
-		return String.format("\nInput Car data: "+super.toString() + "\nPower: "+getPower() + String.format("\nProduction date: %tF ", getProductionDate())+"\n");
+		return String.format(super.toString() + "\nPower: "+getPower() + String.format("\nProduction date: %tF ", getProductionDate())+"\n");
  	}
 
  	public void accelerate(int factor){
@@ -109,21 +110,37 @@ public class Car extends Vehicle implements Driveable, Fileable{
  		
  	}
 
- 	
+ 	@Override
  	public void writeData(java.io.PrintWriter out){
- 		String path = "datafile.txt";
  		
  		try{
- 			java.io.File write = new java.io.File(path);
- 			out = new java.io.PrintWriter(write);
- 			out.printf("%s", getPower());
- 		}catch(java.io.IOException ex){
- 			System.out.println(ex);
- 		}
+
+			java.io.File file = new java.io.File("datafile.txt");
+			out = new java.io.PrintWriter(new java.io.BufferedWriter(new java.io.FileWriter(file)));
+			out.printf("%s, %s",getPower(),String.format("\nProduction date: %tF ", getProductionDate()));
+
+		}catch(java.io.FileNotFoundException ex){
+			System.out.println(ex);
+		}catch(java.io.IOException ex){
+			ex.printStackTrace();
+		}finally{
+			out.close();
+		}
  	
  	}
+ 	@Override
+ 	public void readData(Scanner in){
 
- 	public void readData(java.util.Scanner in){
+ 		try{
+ 			in = new Scanner(new java.io.File("datafile.txt"));
+ 			while(in.hasNext()){
+ 				System.out.printf(in.next());
+ 			}
+ 		}catch(java.io.FileNotFoundException ex){
+ 			ex.printStackTrace();
+ 		}finally{
+ 			in.close();
+ 		}
 
  	}
 }

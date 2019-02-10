@@ -8,7 +8,7 @@ public class VehicleTest {
 
   public static void main(String[] args) {
 
-	  VehicleTest vtest = new VehicleTest();
+    VehicleTest vtest = new VehicleTest();
     try {
       vtest.menuLoop();
     } catch(IOException e) {
@@ -28,8 +28,8 @@ public class VehicleTest {
      
 
     //Cars
-    arr.add(new Car("Black","Volvo","1010-11",2010,85000,390,0));
-    arr.add(new Car("red","Ferrari Testarossa","A112",1996,1200000,350,0));
+    //arr.add(new Car("Black","Volvo","1010-11",2010,85000,390,0));
+    //arr.add(new Car("red","Ferrari Testarossa","A112",1996,1200000,350,0));
     vehicle = new Car();
     Car car = new Car();
     
@@ -37,8 +37,22 @@ public class VehicleTest {
     bicycle = new Bicycle();
     Bicycle cycle = new Bicycle();
 
-    arr.add(new Bicycle("yellow","Diamant","BC100",1993,4000,10,0));
-    arr.add(new Bicycle("pink","DBS","42",1994,5000,10,0));
+    //arr.add(new Bicycle("yellow","Diamant","BC100",1993,4000,10,0));
+    //arr.add(new Bicycle("pink","DBS","42",1994,5000,10,0));
+
+    /*********** Read from file ***************/
+    java.util.Scanner reads = new java.util.Scanner(new java.io.File("datafile.txt")).useLocale(Locale.US);
+    
+      
+      reads.useDelimiter(",");
+      while(reads.hasNext()){
+        System.out.println(reads.next());
+      }
+      //String vehClass = reads.next();
+      //Class veh1 = Class.forName(vehClass);
+      //Vehicle veh = (Vehicle)veh1.newInstance();
+      //veh.readData(reads);
+   
 
     while(true) {
       System.out.println("1...................................New car");
@@ -57,7 +71,7 @@ public class VehicleTest {
       switch (choice) {
       case 1:
         //legg til en ny bil
-
+      System.out.println("Input car data: ");
       vehicle.setAllFields();
       System.out.println("Power: ");
       int power = scan.nextInt();
@@ -68,6 +82,7 @@ public class VehicleTest {
         break;
       case 2:
         //legg til en ny sykkel
+      System.out.println("Input Bicycle data: ");
       bicycle.setAllFields();
       System.out.println("Gears: ");
       int gears = scan.nextInt();
@@ -106,23 +121,10 @@ public class VehicleTest {
       case 4:
         //vis info om alle kjøretøy
         //vehicle = new Car();
-        //for(int i=0; i< arr.size(); i++){
-        //  System.out.println(arr.get(i));
-        //}
-      try{
-        java.io.File file = new java.io.File("datafile.txt");
-        java.util.Scanner in = new java.util.Scanner(file).useLocale(Locale.US);
-        in.useDelimiter(",");
-        String vehClass = in.next();
-        Class veh1 = Class.forName(vehClass);
-        Vehicle veh = (Vehicle)veh1.newInstance();
-      }catch(ClassNotFoundException ex){
-        System.out.println("Test 1");
-      }catch(InstantiationException ex){
-        System.out.println("Test 2");
-      }catch(IllegalAccessException ex){
-        System.out.println("Test 3");
-      }
+        for(int i=0; i< arr.size(); i++){
+          System.out.println(arr.get(i));
+        }
+      
 
         break;
       
@@ -236,7 +238,29 @@ public class VehicleTest {
       
       break;
       case 8:
-      	scan.close();
+      
+      File file = new java.io.File("datafile.txt");
+      java.io.PrintWriter pw = new java.io.PrintWriter(file);
+      //Vehicle vc = new Car();
+
+      //cd.writeData(pw.printf("%s",vd.toString()));
+
+      for (int i=0;i<arr.size() ;i++ ) {
+         System.out.println("Vehicle written to file: "+arr.get(i));
+        //pw.printf("%s",arr.get(i));
+        vehicle.writeData(pw.printf("%s,",arr.get(i)));
+        System.out.println();
+      }
+       
+      
+      
+      
+      
+      
+      pw.close();
+
+
+        scan.close();
         System.exit(0);
       default:
         System.out.println("Wrong input!");

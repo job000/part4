@@ -63,7 +63,7 @@ public class Bicycle extends Vehicle implements Driveable{
 
 	@Override 
 	public String toString(){
-	return String.format("\nInput Bicycle data: "+super.toString() + "\nGears: "+getGears() + String.format("\nProduction date: %tF ", getProductionDate())+"\n");
+	return String.format(super.toString() + "\nGears: "+getGears() + String.format("\nProduction date: %tF ", getProductionDate())+"\n");
  }
 
 

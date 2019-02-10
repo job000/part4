@@ -7,9 +7,9 @@ public abstract class Vehicle implements Comparable<Vehicle>, Cloneable, Driveab
 	protected java.util.Scanner input;
 	private java.util.Calendar buyingDate;
 
-	public Vehicle(){}
+	protected Vehicle(){}
 
-	public Vehicle(String colour, String name, String serialNr, int model, int price, int direction){
+	protected Vehicle(String colour, String name, String serialNr, int model, int price, int direction){
 
 		this.name = name;
 		this.serialNr = serialNr;
@@ -108,17 +108,34 @@ public abstract class Vehicle implements Comparable<Vehicle>, Cloneable, Driveab
 		System.out.println("Vehicle stops... ");
 	}
 
+	@Override
 	public void writeData(java.io.PrintWriter out){
 		try{
-			out = new java.io.PrintWriter(new java.io.File("testFile.txt"));
+			java.io.File file = new java.io.File("datafile.txt");
+			out = new java.io.PrintWriter(new java.io.BufferedWriter(new java.io.FileWriter(file)));
+			out.printf("%s,",toString());
+
 		}catch(java.io.FileNotFoundException ex){
 			System.out.println(ex);
-		}
+		}catch(java.io.IOException ex){
+			ex.printStackTrace();
+		}finally{
 
+			out.close();
+
+		}
 	}
 
 	public void readData(java.util.Scanner in){
 
+		try{
+			java.io.File file = new java.io.File("testfile.txt");
+			in = new java.util.Scanner(file);
+		}catch(java.io.FileNotFoundException ex){
+			ex.printStackTrace();
+		}finally{
+			in.close();
+		}
 	}
 
 }
