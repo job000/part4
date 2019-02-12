@@ -34,7 +34,6 @@ public class Car extends Vehicle implements Driveable{
 
 			//Converts negativ and positiv value that is 
 			//less than 0 and more than 360 into between 0-360
-
 			degrees = Math.abs(degrees);
 			while(degrees > 360){
 				degrees-=360;
@@ -57,25 +56,19 @@ public class Car extends Vehicle implements Driveable{
 		}
 	}
 
-	public java.util.Calendar getProductionDate(){
-		return this.productionDate;
-	}
+	public java.util.Calendar getProductionDate(){ return this.productionDate; }
 
 	public void setProductionDate(java.util.Calendar productionDate){
 		this.productionDate = productionDate;
 	}
 
-	public int getPower(){
-		return power;
-	}
+	public int getPower(){ return power; }
 
-	public void setPower(int power){
-		this.power = power;
-	}
+	public void setPower(int power){ this.power = power; }
 
 	@Override 
 	public String toString(){
-		return String.format(super.toString() + "\nPower: "+getPower() + String.format("\nProduction date: %tF ", getProductionDate())+"\n");
+		return String.format(super.toString() + ", Power: "+getPower() + String.format(", Production date: %tF ", getProductionDate())+"\n");
  	}
 
  	public void accelerate(int factor){
@@ -113,20 +106,8 @@ public class Car extends Vehicle implements Driveable{
  	@Override
  	public void writeData(java.io.PrintWriter out){
  		
- 		try{
-
-			java.io.File file = new java.io.File("datafile.txt");
-			out = new java.io.PrintWriter(new java.io.BufferedWriter(new java.io.FileWriter(file)));
-			out.printf("%s, %s",getPower(),String.format("\nProduction date: %tF ", getProductionDate()));
-
-		}catch(java.io.FileNotFoundException ex){
-			System.out.println(ex);
-		}catch(java.io.IOException ex){
-			ex.printStackTrace();
-		}finally{
-			out.close();
-		}
- 	
+		super.writeData(out);
+		out.println(getPower());
  	}
  	@Override
  	public void readData(Scanner in){
@@ -141,6 +122,5 @@ public class Car extends Vehicle implements Driveable{
  		}finally{
  			in.close();
  		}
-
  	}
 }

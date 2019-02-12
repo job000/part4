@@ -19,7 +19,6 @@ public abstract class Vehicle implements Comparable<Vehicle>, Cloneable, Driveab
 		this.colour = colour;
 
 		this.buyingDate = new java.util.GregorianCalendar();
-
 		this.speed = 0.0;
 	}
 
@@ -81,8 +80,8 @@ public abstract class Vehicle implements Comparable<Vehicle>, Cloneable, Driveab
 
 	public String toString(){
 		return "\nName: "+getName()+
-		"\nColour: "+getColour() + "\nPrice: "+getPrice()+
-		"\nModel: "+getModel()+ "\nSerial #: "+getSerialNr();
+		", Colour: "+getColour() + ", Price: "+getPrice()+
+		", Model: "+getModel()+ ", Serial #: "+getSerialNr();
 	}
 
 	@Override
@@ -108,22 +107,16 @@ public abstract class Vehicle implements Comparable<Vehicle>, Cloneable, Driveab
 		System.out.println("Vehicle stops... ");
 	}
 
-	@Override
+	
 	public void writeData(java.io.PrintWriter out){
-		try{
-			java.io.File file = new java.io.File("datafile.txt");
-			out = new java.io.PrintWriter(new java.io.BufferedWriter(new java.io.FileWriter(file)));
-			out.printf("%s,",toString());
 
-		}catch(java.io.FileNotFoundException ex){
-			System.out.println(ex);
-		}catch(java.io.IOException ex){
-			ex.printStackTrace();
-		}finally{
-
-			out.close();
-
-		}
+		out.println(getName());
+		out.println(getColour());
+		out.println(getSerialNr());
+		out.println(getModel());
+		out.println(getPrice());
+		out.println(getSpeed());
+		
 	}
 
 	public void readData(java.util.Scanner in){
@@ -137,7 +130,6 @@ public abstract class Vehicle implements Comparable<Vehicle>, Cloneable, Driveab
 			in.close();
 		}
 	}
-
 }
 
 

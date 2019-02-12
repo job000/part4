@@ -41,19 +41,33 @@ public class VehicleTest {
     //arr.add(new Bicycle("pink","DBS","42",1994,5000,10,0));
 
     /*********** Read from file ***************/
-    java.util.Scanner reads = new java.util.Scanner(new java.io.File("datafile.txt")).useLocale(Locale.US);
+   /* java.util.Scanner reads = new java.util.Scanner(new java.io.File("datafile.txt")).useLocale(Locale.US);
     
-      
       reads.useDelimiter(",");
+      String vehClass = reads.next();                    // leser klassenavnet fra filen
+      try{
+         veh1 = Class.forName(vehClass);           // oppretter Class objekt for angitt klassenavn (String)
+        Vehicle veh = (Vehicle)veh1.newInstance();      // oppretter ny instans av Vehicle
       while(reads.hasNext()){
         System.out.println(reads.next());
+        arr.add(veh);
+
       }
+    }catch(ClassNotFoundException ex){
+      ex.printStackTrace();
+    }catch(InstantiationException ex){
+      ex.printStackTrace();
+    }catch(IllegalAccessException ex){
+      ex.printStackTrace();
+    }finally{
+      reads.close();
+    }*/
+
       //String vehClass = reads.next();
       //Class veh1 = Class.forName(vehClass);
       //Vehicle veh = (Vehicle)veh1.newInstance();
       //veh.readData(reads);
    
-
     while(true) {
       System.out.println("1...................................New car");
       System.out.println("2...............................New bicycle");
@@ -77,8 +91,10 @@ public class VehicleTest {
       int power = scan.nextInt();
       car.setPower(power);
 
-      arr.add(new Car(vehicle.getColour(),vehicle.getName(),vehicle.getSerialNr(),vehicle.getModel(),vehicle.getPrice(),car.getPower(),vehicle.getDirection()));
 
+
+      arr.add(new Car(vehicle.getColour(),vehicle.getName(),vehicle.getSerialNr(),vehicle.getModel(),vehicle.getPrice(),car.getPower(),vehicle.getDirection()));
+      
         break;
       case 2:
         //legg til en ny sykkel
@@ -109,13 +125,10 @@ public class VehicleTest {
           }else{
             continue;
           }
-
         }
         System.out.println("We found "+counter+" that contains '"+searching+"' in there name from our list.");
         System.out.println(result);
 
-
-    
         break;
 
       case 4:
@@ -124,8 +137,6 @@ public class VehicleTest {
         for(int i=0; i< arr.size(); i++){
           System.out.println(arr.get(i));
         }
-      
-
         break;
       
       case 5:
@@ -148,6 +159,7 @@ public class VehicleTest {
               System.out.printf("Enter degree: ");
               int deg = scan.nextInt();
               vehicle.turnLeft(deg);
+
             }else if (direction.toUpperCase().contains("R")) {
               System.out.println("Turning Right.");
               System.out.printf("Enter degree: ");
@@ -155,8 +167,7 @@ public class VehicleTest {
               vehicle.turnRight(deg);
             }
             
-          }else{
-            
+            }else{
           }
         }
 
@@ -187,8 +198,6 @@ public class VehicleTest {
           System.out.println("Date objects are not separate");
         }
         //System.out.println(xcopy.getBuyingDate().equals(c.getBuyingDate()));
-
-        
         System.out.println();
 
       }catch(CloneNotSupportedException ex){
@@ -220,7 +229,6 @@ public class VehicleTest {
       Vehicle b1 = new Bicycle();
       Vehicle b2 = new Bicycle();
       
-
       System.out.println("Bicycle");
       //Bicycle 1:
       b1.setSpeed(0);
@@ -235,33 +243,22 @@ public class VehicleTest {
       System.out.println("Vehicle slowed down to: "+b1.getSpeed() +" km/h");
       b1.stop();
       
-      
       break;
       case 8:
+
+      java.io.File  writer = new java.io.File("vtreport.txt");
       
-      File file = new java.io.File("datafile.txt");
-      java.io.PrintWriter pw = new java.io.PrintWriter(file);
-      //Vehicle vc = new Car();
+      try( java.io.PrintWriter out = new java.io.PrintWriter(writer);){
+           
+        vehicle.writeData(out);
+        car.writeData(out);
+        out.close();
 
-      //cd.writeData(pw.printf("%s",vd.toString()));
-
-      for (int i=0;i<arr.size() ;i++ ) {
-         System.out.println("Vehicle written to file: "+arr.get(i));
-        //pw.printf("%s",arr.get(i));
-        vehicle.writeData(pw.printf("%s,",arr.get(i)));
-        System.out.println();
+      }catch(java.io.IOException ex){
+        ex.printStackTrace();
       }
-       
       
-      
-      
-      
-      
-      pw.close();
-
-
-        scan.close();
-        System.exit(0);
+      System.exit(0);
       default:
         System.out.println("Wrong input!");
       }
