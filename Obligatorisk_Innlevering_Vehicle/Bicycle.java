@@ -61,7 +61,7 @@ public class Bicycle extends Vehicle implements Driveable{
 
 	public java.util.Calendar getProductionDate(){ return productionDate; }
 
-	public void setProductionDate(java.util.Calendar productionDate){
+	public void setProductionDate(Calendar productionDate){
 		
 		this.productionDate = productionDate;
 	}

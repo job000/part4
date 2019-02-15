@@ -52,8 +52,8 @@ public class VehicleTest {
       reads.useDelimiter(",");
       
       while(reads.hasNext()){
-        String vehClass = reads.next();                    // leser klassenavnet fra filen
-        Class veh1 = Class.forName(vehClass);           // oppretter Class objekt for angitt klassenavn (String)
+        String vehClass = reads.next();                // leser klassenavnet fra filen
+        Class veh1 = Class.forName(vehClass);         // oppretter Class objekt for angitt klassenavn (String)
         Vehicle veh = (Vehicle)veh1.newInstance(); 
         
         if(veh1.getName().equals("Car")){
@@ -64,7 +64,6 @@ public class VehicleTest {
           arr.add(veh);
         }
       }
-
       reads.close();
 
       for (int i =0;i<arr.size() ;i++ ) {
@@ -174,7 +173,7 @@ public class VehicleTest {
 
       case 6:
         //Skriv test clone method her.
-        java.util.Calendar cal = new GregorianCalendar(2018,2,10);
+        Calendar cal = new GregorianCalendar(2018,2,10);
         Vehicle c = new Car("blue","Toyota","YE-1234",2010,1234567,350,0);
         arr.add(c);
         //Car vcopy = new Car();//Car();
@@ -241,8 +240,8 @@ public class VehicleTest {
         
         break;
       case 8:
-        java.io.File  writer = new java.io.File("vtreport.txt");
-        try( java.io.PrintWriter out = new java.io.PrintWriter(writer);){
+        File  writer = new File("vtreport.txt");
+        try( PrintWriter out = new PrintWriter(writer);){
 
           for (int i =0;i<arr.size() ;i++ ) {
             System.out.println("Vehicle written to file: "+arr.get(i));
@@ -250,7 +249,7 @@ public class VehicleTest {
           }
           
           out.close();
-        }catch(java.io.IOException ex){
+        }catch(IOException ex){
           ex.printStackTrace();
         }
         System.out.println();

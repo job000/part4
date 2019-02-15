@@ -5,7 +5,7 @@ import java.text.*;
 public class Car extends Vehicle implements Driveable{
 	
 	private int power;
-	private java.util.Calendar productionDate;
+	private Calendar productionDate;
 
 	//Empty Constructor
 	public Car(){}
@@ -67,7 +67,7 @@ public class Car extends Vehicle implements Driveable{
 
 	public java.util.Calendar getProductionDate(){ return this.productionDate; }
 
-	public void setProductionDate(java.util.Calendar productionDate){
+	public void setProductionDate(Calendar productionDate){
 		this.productionDate = productionDate;
 	}
 

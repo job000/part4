@@ -1,13 +1,14 @@
 import java.lang.*;
 import java.util.*;
 import java.text.*;
+import java.io.*;
 public abstract class Vehicle implements Comparable<Vehicle>, Cloneable, Driveable, Fileable{
 
 	private String colour, name, serialNr;
 	private int model, price, direction;
 	private double speed;
-	protected java.util.Scanner input;
-	private java.util.Calendar buyingDate;
+	protected Scanner input;
+	private Calendar buyingDate;
 
 	protected Vehicle(){}
 
@@ -20,13 +21,13 @@ public abstract class Vehicle implements Comparable<Vehicle>, Cloneable, Driveab
 		this.direction = direction;
 		this.colour = colour;
 
-		this.buyingDate = new java.util.GregorianCalendar(2019,02,10);
+		this.buyingDate = new GregorianCalendar(2019,02,10);
 		this.speed = 0.0;
 	}
 
 	public void setAllFields(){
 
-		input = new java.util.Scanner(System.in);
+		input = new Scanner(System.in);
 
 		System.out.println("Name: ");
 		this.name = input.nextLine();
@@ -91,7 +92,7 @@ public abstract class Vehicle implements Comparable<Vehicle>, Cloneable, Driveab
 		return super.clone();
 	}
 
-	public void setBuyingDate(java.util.Calendar buyingDate){
+	public void setBuyingDate(Calendar buyingDate){
 		this.buyingDate = buyingDate;
 	}
 
@@ -110,26 +111,16 @@ public abstract class Vehicle implements Comparable<Vehicle>, Cloneable, Driveab
 	}
 
 	
-	public void writeData(java.io.PrintWriter out){
-
+	public void writeData(PrintWriter out){
 		out.printf("%s,%s,%s,%s,%s,%.2f,",getName(),getColour(),getSerialNr(),getModel(),getPrice(),getSpeed());
 	}
 
-	public void readData(java.util.Scanner in){
-		
-
+	public void readData(Scanner in){
 		setName(in.next().toString());
 		setColour(in.next().toString());
 		setSerialNr(in.next().toString());
 		setModel(Integer.parseInt(in.next()));
 		setPrice(Integer.parseInt(in.next()));
 		setSpeed(Double.parseDouble(in.next()));
-
-
-
-
-
 	}
 }
-
-
