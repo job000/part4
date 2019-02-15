@@ -17,12 +17,20 @@ public class VehicleTest {
     } catch(CloneNotSupportedException e) {
       System.out.println("CloneNotSupportedException");
       System.exit(1);
+    }catch(ClassNotFoundException ex){
+      ex.printStackTrace();
+    }catch(IllegalAccessException ex){
+      ex.printStackTrace();
+    }catch(InstantiationException ex){
+      ex.printStackTrace();
     }
   }
 
-  private void menuLoop() throws IOException, CloneNotSupportedException {
+  private void menuLoop() throws IOException, CloneNotSupportedException,
+  ClassNotFoundException,IllegalAccessException,InstantiationException,NoSuchElementException {
     Scanner scan = new Scanner(System.in);
     ArrayList<Vehicle> arr = new ArrayList<Vehicle>();
+    ArrayList<String> grr = new ArrayList<String>();
     Vehicle vehicle;
     Vehicle bicycle;
      
@@ -30,7 +38,6 @@ public class VehicleTest {
     //Cars
     //arr.add(new Car("Black","Volvo","1010-11",2010,85000,390,0));
     //arr.add(new Car("red","Ferrari Testarossa","A112",1996,1200000,350,0));
-    vehicle = new Car();
     Car car = new Car();
     
     //Bicycle
@@ -41,33 +48,30 @@ public class VehicleTest {
     //arr.add(new Bicycle("pink","DBS","42",1994,5000,10,0));
 
     /*********** Read from file ***************/
-   /* java.util.Scanner reads = new java.util.Scanner(new java.io.File("datafile.txt")).useLocale(Locale.US);
-    
+      Scanner reads = new Scanner(new File("vtreport.txt")).useLocale(Locale.US);
       reads.useDelimiter(",");
-      String vehClass = reads.next();                    // leser klassenavnet fra filen
-      try{
-         veh1 = Class.forName(vehClass);           // oppretter Class objekt for angitt klassenavn (String)
-        Vehicle veh = (Vehicle)veh1.newInstance();      // oppretter ny instans av Vehicle
+      
       while(reads.hasNext()){
-        System.out.println(reads.next());
-        arr.add(veh);
-
+        String vehClass = reads.next();                    // leser klassenavnet fra filen
+        Class veh1 = Class.forName(vehClass);           // oppretter Class objekt for angitt klassenavn (String)
+        Vehicle veh = (Vehicle)veh1.newInstance(); 
+        
+        if(veh1.getName().equals("Car")){
+          veh.readData(reads);
+          arr.add(veh);
+        }else{
+          veh.readData(reads);
+          arr.add(veh);
+        }
       }
-    }catch(ClassNotFoundException ex){
-      ex.printStackTrace();
-    }catch(InstantiationException ex){
-      ex.printStackTrace();
-    }catch(IllegalAccessException ex){
-      ex.printStackTrace();
-    }finally{
-      reads.close();
-    }*/
 
-      //String vehClass = reads.next();
-      //Class veh1 = Class.forName(vehClass);
-      //Vehicle veh = (Vehicle)veh1.newInstance();
-      //veh.readData(reads);
-   
+      reads.close();
+
+      for (int i =0;i<arr.size() ;i++ ) {
+        System.out.println("Vehicle read from file: "+arr.get(i));
+      }
+      
+     
     while(true) {
       System.out.println("1...................................New car");
       System.out.println("2...............................New bicycle");
@@ -85,26 +89,24 @@ public class VehicleTest {
       switch (choice) {
       case 1:
         //legg til en ny bil
-      System.out.println("Input car data: ");
-      vehicle.setAllFields();
-      System.out.println("Power: ");
-      int power = scan.nextInt();
-      car.setPower(power);
-
-
-
-      arr.add(new Car(vehicle.getColour(),vehicle.getName(),vehicle.getSerialNr(),vehicle.getModel(),vehicle.getPrice(),car.getPower(),vehicle.getDirection()));
-      
+        vehicle = new Car();
+        System.out.println("Input car data: ");
+        vehicle.setAllFields();
+        System.out.println("Power: ");
+        int power = scan.nextInt();
+        car.setPower(power);
+        arr.add(new Car(vehicle.getColour(),vehicle.getName(),vehicle.getSerialNr(),vehicle.getModel(),vehicle.getPrice(),car.getPower(),vehicle.getDirection()));
+        
         break;
       case 2:
-        //legg til en ny sykkel
-      System.out.println("Input Bicycle data: ");
-      bicycle.setAllFields();
-      System.out.println("Gears: ");
-      int gears = scan.nextInt();
-      car.setPower(gears);
+          //legg til en ny sykkel
+        System.out.println("Input Bicycle data: ");
+        bicycle.setAllFields();
+        System.out.println("Gears: ");
+        int gears = scan.nextInt();
+        car.setPower(gears);
 
-      arr.add(new Bicycle(bicycle.getColour(),bicycle.getName(),bicycle.getSerialNr(),bicycle.getModel(),bicycle.getPrice(),cycle.getGears(),bicycle.getDirection()));
+        arr.add(new Bicycle(bicycle.getColour(),bicycle.getName(),bicycle.getSerialNr(),bicycle.getModel(),bicycle.getPrice(),cycle.getGears(),bicycle.getDirection()));
 
         break;
       case 3:
@@ -121,7 +123,6 @@ public class VehicleTest {
           if (arr.get(i).getName().toUpperCase().contains(searching.toUpperCase()) ){
             result+=arr.get(i).toString();
             counter+=1; //Counts number of hit
-
           }else{
             continue;
           }
@@ -158,107 +159,103 @@ public class VehicleTest {
               System.out.println("Turning Left.");
               System.out.printf("Enter degree: ");
               int deg = scan.nextInt();
-              vehicle.turnLeft(deg);
+              arr.get(i).turnLeft(deg);
 
             }else if (direction.toUpperCase().contains("R")) {
               System.out.println("Turning Right.");
               System.out.printf("Enter degree: ");
               int deg = scan.nextInt();
-              vehicle.turnRight(deg);
+              arr.get(i).turnRight(deg);
             }
-            
-            }else{
-          }
+          }else{}
         }
 
         break;
+
       case 6:
+        //Skriv test clone method her.
+        java.util.Calendar cal = new GregorianCalendar(2018,2,10);
+        Vehicle c = new Car("blue","Toyota","YE-1234",2010,1234567,350,0);
+        arr.add(c);
+        //Car vcopy = new Car();//Car();
+        try{
 
-      //Skriv test clone method her.
-      java.util.Calendar cal = new GregorianCalendar(2018,2,10);
-      Vehicle c = new Car("blue","Toyota","YE-1234",2010,1234567,350,0);
-      arr.add(c);
-      //Car vcopy = new Car();//Car();
-      try{
+          Car xcopy = (Car) c.clone();
+          //Bruker compareTo for å vise prisen.
+          //System.out.println(xcopy.compareTo(c));
+          System.out.printf("%tF",xcopy.getBuyingDate());
+          System.out.println();
+          c.setBuyingDate(cal);
+          System.out.println();
+          System.out.printf("%tF",c.getBuyingDate());
+          System.out.println();
 
-        Car xcopy = (Car) c.clone();
-        
-        //Bruker compareTo for å vise prisen.
-        //System.out.println(xcopy.compareTo(c));
-        System.out.printf("%tF",xcopy.getBuyingDate());
-        System.out.println();
-        c.setBuyingDate(cal);
-        System.out.println();
-        System.out.printf("%tF",c.getBuyingDate());
-        System.out.println();
-
-        if(xcopy.getBuyingDate() != c.getBuyingDate()){
-          System.out.println("Date objects are separate, deep copy.");
-        }else{
-          System.out.println("Date objects are not separate");
+          if(xcopy.getBuyingDate() != c.getBuyingDate()){
+            System.out.println("Date objects are separate, deep copy.");
+          }else{
+            System.out.println("Date objects are not separate");
+          }
+          //System.out.println(xcopy.getBuyingDate().equals(c.getBuyingDate()));
+          System.out.println();
+        }catch(CloneNotSupportedException ex){
+          System.err.println("Error Cloning...");
         }
-        //System.out.println(xcopy.getBuyingDate().equals(c.getBuyingDate()));
-        System.out.println();
+        break;
 
-      }catch(CloneNotSupportedException ex){
-        System.err.println("Error Cloning...");
-      }
-
-      break;
       case 7:
-      //Test driveable interface
-      
-      Vehicle car1 = new Car();
-      Vehicle car2 = new Car();
-      System.out.println("Car: ");
-      //Car 1
-      car1.setSpeed(0);
-      car1.accelerate(10);
-      System.out.println("Vehicle accelerated to: "+car1.getSpeed() +" km/h");
-      
-      //Car 2:
-      car2.setSpeed(100);
-      car2.accelerate(10);
-      System.out.println("Vehicle accelerated to: "+car2.getSpeed() +" km/h");
+        //Test driveable interface
+        Vehicle car1 = new Car();
+        Vehicle car2 = new Car();
+        System.out.println("Car: ");
+        //Car 1
+        car1.setSpeed(0);
+        car1.accelerate(10);
+        System.out.println("Vehicle accelerated to: "+car1.getSpeed() +" km/h");
+        
+        //Car 2:
+        car2.setSpeed(100);
+        car2.accelerate(10);
+        System.out.println("Vehicle accelerated to: "+car2.getSpeed() +" km/h");
 
-      car2.breaks(1000);
-      System.out.println("Vehicle slowed down to: "+car2.getSpeed()+" km/h");
-      System.out.println();
-      car1.stop();
+        car2.breaks(1000);
+        System.out.println("Vehicle slowed down to: "+car2.getSpeed()+" km/h");
+        System.out.println();
+        car1.stop();
 
-      Vehicle b1 = new Bicycle();
-      Vehicle b2 = new Bicycle();
-      
-      System.out.println("Bicycle");
-      //Bicycle 1:
-      b1.setSpeed(0);
-      b1.accelerate(10);
-      System.out.println("Vehicle accelerated to: "+b1.getSpeed() +" km/h");
-      //Bicycle 2:
-      b2.setSpeed(10);
-      b2.accelerate(10);
-      System.out.println("Vehicle accelerated to: "+b2.getSpeed() +" km/h");
+        Vehicle b1 = new Bicycle();
+        Vehicle b2 = new Bicycle();
+        
+        System.out.println("Bicycle");
+        //Bicycle 1:
+        b1.setSpeed(0);
+        b1.accelerate(10);
+        System.out.println("Vehicle accelerated to: "+b1.getSpeed() +" km/h");
+        //Bicycle 2:
+        b2.setSpeed(10);
+        b2.accelerate(10);
+        System.out.println("Vehicle accelerated to: "+b2.getSpeed() +" km/h");
 
-      b1.breaks(30);
-      System.out.println("Vehicle slowed down to: "+b1.getSpeed() +" km/h");
-      b1.stop();
-      
-      break;
+        b1.breaks(30);
+        System.out.println("Vehicle slowed down to: "+b1.getSpeed() +" km/h");
+        b1.stop();
+        
+        break;
       case 8:
+        java.io.File  writer = new java.io.File("vtreport.txt");
+        try( java.io.PrintWriter out = new java.io.PrintWriter(writer);){
 
-      java.io.File  writer = new java.io.File("vtreport.txt");
-      
-      try( java.io.PrintWriter out = new java.io.PrintWriter(writer);){
-           
-        vehicle.writeData(out);
-        car.writeData(out);
-        out.close();
-
-      }catch(java.io.IOException ex){
-        ex.printStackTrace();
-      }
-      
-      System.exit(0);
+          for (int i =0;i<arr.size() ;i++ ) {
+            System.out.println("Vehicle written to file: "+arr.get(i));
+            arr.get(i).writeData(out);
+          }
+          
+          out.close();
+        }catch(java.io.IOException ex){
+          ex.printStackTrace();
+        }
+        System.out.println();
+        
+        System.exit(0);
       default:
         System.out.println("Wrong input!");
       }

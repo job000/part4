@@ -1,21 +1,29 @@
 import java.util.Calendar;
 import java.util.*;
-
+import java.text.*;
 
 public class Bicycle extends Vehicle implements Driveable{
 
 	private int gears;
-	private java.util.Calendar productionDate;
+	private Calendar productionDate;
 
-	public Bicycle(){
-
-	}
+	public Bicycle(){}
 
 	public Bicycle(String colour, String name, String serialNr, int model, int price,int gears, int direction){
-		super(colour, name, serialNr, model, price, direction);
+		//super(colour, name, serialNr, model, price, direction);
+		super();
+		super.setName(name);
+		super.setColour(colour);
+		super.setSerialNr(serialNr);
+		super.setModel(model);
+		super.setPrice(price);
+		super.setDirection(direction);
+
+		Calendar cal = new GregorianCalendar(2018,10,10);
+		super.setBuyingDate(cal);
 		this.gears = gears;
 
-		productionDate = new GregorianCalendar();
+		this.productionDate = new GregorianCalendar();
 	}
 
 	@Override
@@ -25,7 +33,6 @@ public class Bicycle extends Vehicle implements Driveable{
 		if (degrees>=0 && degrees <=360) {
 			degrees=degrees;
 			System.out.println("Turning "+degrees+" degrees.");
-
 		}else{
 			degrees = Math.abs(degrees);
 			while(degrees > 360){
@@ -40,7 +47,6 @@ public class Bicycle extends Vehicle implements Driveable{
 			degrees=degrees;
 			System.out.println("Turning "+degrees+" degrees.");
 		}else{
-			
 			degrees = Math.abs(degrees);
 			while(degrees > 360){
 				degrees-=360;
@@ -63,11 +69,10 @@ public class Bicycle extends Vehicle implements Driveable{
 
 	@Override 
 	public String toString(){
-	return String.format(super.toString() + "\nGears: "+getGears() + String.format("\nProduction date: %tF ", getProductionDate())+"\n");
- }
+	return String.format(super.toString() + " Gears: "+getGears() + String.format(" Production date: %tF ", getProductionDate())+"\n");
+ 	}
 
-
- public void accelerate(int factor){
+ 	public void accelerate(int factor){
  		double tempValue = 0.0;
  	
  		if (getSpeed()<= 0) {
@@ -85,7 +90,6 @@ public class Bicycle extends Vehicle implements Driveable{
  			
  		}else{
  			setSpeed(MAX_SPEED_CAR);
- 			
  		}
  	}
 
@@ -95,6 +99,28 @@ public class Bicycle extends Vehicle implements Driveable{
  		}else{
  			System.out.println("Not defined speed.");
  		}
- 		
+ 	}
+
+ 	@Override
+ 	public void writeData(java.io.PrintWriter out){
+ 		out.printf("%s,",getClass().getName());
+		super.writeData(out);
+		out.printf("%s,",getGears());
+		out.printf("%s,",String.format("%tF",getProductionDate()));
+ 	}
+
+ 	@Override
+ 	public void readData(Scanner in){
+ 		super.readData(in);
+ 		setGears(Integer.parseInt(in.next()));
+ 		Calendar cal = Calendar.getInstance();
+
+ 		try{
+			Date pd = new SimpleDateFormat("yyyy-MM-dd").parse(in.next());
+			cal.setTime(pd);
+			setProductionDate(cal);
+		}catch(ParseException ex){
+			ex.printStackTrace();
+		}
  	}
 }

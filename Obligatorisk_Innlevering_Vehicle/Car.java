@@ -1,5 +1,6 @@
 import java.util.Calendar;
 import java.util.*;
+import java.text.*;
 
 public class Car extends Vehicle implements Driveable{
 	
@@ -10,14 +11,18 @@ public class Car extends Vehicle implements Driveable{
 	public Car(){}
 
 	public Car(String colour, String name, String serialNr, int model, int price,int power, int direction){
-		super(colour, name, serialNr, model, price, direction);
+
+		super();
+		super.setName(name);
+		super.setColour(colour);
+		super.setSerialNr(serialNr);
+		super.setModel(model);
+		super.setPrice(price);
+		super.setDirection(direction);
 
 		productionDate = new GregorianCalendar();
-		java.util.Calendar cal = new GregorianCalendar(2018,10,10);
-		setBuyingDate(cal);
+		
 		this.power = power;
-
-		//this.speed = 0;
 	}
 
 	@Override
@@ -26,12 +31,13 @@ public class Car extends Vehicle implements Driveable{
 	}
 
 	public void turnRight(int degrees){
+
 		if (degrees>=0 && degrees <=360) {
-			degrees=degrees;
+			//degrees=degrees;
 			System.out.println("Turning "+degrees+" degrees.");
+			super.setDirection(degrees);
 
 		}else{
-
 			//Converts negativ and positiv value that is 
 			//less than 0 and more than 360 into between 0-360
 			degrees = Math.abs(degrees);
@@ -39,13 +45,15 @@ public class Car extends Vehicle implements Driveable{
 				degrees-=360;
 			}
 			System.out.println("Turning "+degrees+" degrees.");
+			super.setDirection(degrees);
 		}
 	}
 
 	public void turnLeft(int degrees){
 		if (degrees>=0 && degrees <=360) {
-			degrees=degrees;
+			//degrees=degrees;
 			System.out.println("Turning "+degrees+" degrees.");
+			super.setDirection(degrees);
 		}else{
 			
 			degrees = Math.abs(degrees);
@@ -53,6 +61,7 @@ public class Car extends Vehicle implements Driveable{
 				degrees-=360;
 			}
 			System.out.println("Turning "+degrees+" degrees.");
+			super.setDirection(degrees);
 		}
 	}
 
@@ -74,53 +83,55 @@ public class Car extends Vehicle implements Driveable{
  	public void accelerate(int factor){
  		double tempValue = 0.0;
  	
- 		if (getSpeed()<= 0) {
+ 		if (super.getSpeed() == 0) {
 
- 			setSpeed(0.5* factor);
+ 			super.setSpeed(0.5* factor);
  			
- 		}else if(getSpeed()>0 && getSpeed()<= MAX_SPEED_CAR ){
+ 		}else if(super.getSpeed() > 0 && super.getSpeed() <= MAX_SPEED_CAR ){
 
- 			tempValue = getSpeed() * factor;
+ 			tempValue = super.getSpeed() * factor;
  			if (tempValue < MAX_SPEED_CAR) {
- 				setSpeed(getSpeed() * factor);
+ 				super.setSpeed(super.getSpeed() * factor);
  			}else{
- 				setSpeed(MAX_SPEED_CAR);
+ 				super.setSpeed(MAX_SPEED_CAR);
  			}
- 			
  		}else{
- 			setSpeed(MAX_SPEED_CAR);
+ 			super.setSpeed(MAX_SPEED_CAR);
  			
  		}
  	}
 
  	public void breaks(int factor){
 
- 		if (getSpeed()>=0 && getSpeed()<= MAX_SPEED_CAR) {
- 			setSpeed(getSpeed() / factor);
+ 		if (super.getSpeed()>=0 && super.getSpeed()<= MAX_SPEED_CAR) {
+ 			super.setSpeed(super.getSpeed() / factor);
  		}else{
  			System.out.println("Not defined speed.");
  		}
- 		
  	}
 
  	@Override
  	public void writeData(java.io.PrintWriter out){
- 		
+
+ 		out.printf("%s,",getClass().getName());
 		super.writeData(out);
-		out.println(getPower());
+		out.printf("%s,",getPower());
+		out.printf("%s,",String.format("%tF",getProductionDate()));
+
  	}
+
  	@Override
  	public void readData(Scanner in){
+ 		super.readData(in);
+ 		Calendar cal = Calendar.getInstance();
 
+ 		setPower(Integer.parseInt(in.next()));
  		try{
- 			in = new Scanner(new java.io.File("datafile.txt"));
- 			while(in.hasNext()){
- 				System.out.printf(in.next());
- 			}
- 		}catch(java.io.FileNotFoundException ex){
- 			ex.printStackTrace();
- 		}finally{
- 			in.close();
- 		}
+			Date pd = new SimpleDateFormat("yyyy-MM-dd").parse(in.next());
+			cal.setTime(pd);
+			setProductionDate(cal);
+		}catch(ParseException ex){
+			ex.printStackTrace();
+		}
  	}
 }

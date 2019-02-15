@@ -1,4 +1,6 @@
-
+import java.lang.*;
+import java.util.*;
+import java.text.*;
 public abstract class Vehicle implements Comparable<Vehicle>, Cloneable, Driveable, Fileable{
 
 	private String colour, name, serialNr;
@@ -18,7 +20,7 @@ public abstract class Vehicle implements Comparable<Vehicle>, Cloneable, Driveab
 		this.direction = direction;
 		this.colour = colour;
 
-		this.buyingDate = new java.util.GregorianCalendar();
+		this.buyingDate = new java.util.GregorianCalendar(2019,02,10);
 		this.speed = 0.0;
 	}
 
@@ -79,7 +81,7 @@ public abstract class Vehicle implements Comparable<Vehicle>, Cloneable, Driveab
 	public void setSpeed(double speed){ this.speed = speed; }
 
 	public String toString(){
-		return "\nName: "+getName()+
+		return " Name: "+getName()+
 		", Colour: "+getColour() + ", Price: "+getPrice()+
 		", Model: "+getModel()+ ", Serial #: "+getSerialNr();
 	}
@@ -110,25 +112,23 @@ public abstract class Vehicle implements Comparable<Vehicle>, Cloneable, Driveab
 	
 	public void writeData(java.io.PrintWriter out){
 
-		out.println(getName());
-		out.println(getColour());
-		out.println(getSerialNr());
-		out.println(getModel());
-		out.println(getPrice());
-		out.println(getSpeed());
-		
+		out.printf("%s,%s,%s,%s,%s,%.2f,",getName(),getColour(),getSerialNr(),getModel(),getPrice(),getSpeed());
 	}
 
 	public void readData(java.util.Scanner in){
+		
 
-		try{
-			java.io.File file = new java.io.File("testfile.txt");
-			in = new java.util.Scanner(file);
-		}catch(java.io.FileNotFoundException ex){
-			ex.printStackTrace();
-		}finally{
-			in.close();
-		}
+		setName(in.next().toString());
+		setColour(in.next().toString());
+		setSerialNr(in.next().toString());
+		setModel(Integer.parseInt(in.next()));
+		setPrice(Integer.parseInt(in.next()));
+		setSpeed(Double.parseDouble(in.next()));
+
+
+
+
+
 	}
 }
 
